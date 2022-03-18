@@ -2,9 +2,11 @@ package urnaeletronica;
 
 import LimitaCaracteres.LimitaCaracteres;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
+import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 
@@ -15,9 +17,9 @@ public class urna extends javax.swing.JFrame {
     candidato c3 = new candidato("Margarina","Sementinha","Verde",18);
     candidato c4 = new candidato("Vader","Palpatine","PEM",66);
     candidato c5 = new candidato("Nulo","Nulo","Nulo",00);
-    candidato[] candidatos = {c1,c2,c3,c4,c5};
+    candidato c6 = new candidato("Branco","Branco","Branco",99);
+    candidato[] candidatos = {c1,c2,c3,c4,c5,c6};
     int[] votos = new int[500];
-    int qtdVotos = 0;
     public urna() {
         initComponents();
         txtNumCand.setDocument(new LimitaCaracteres(2, LimitaCaracteres.TipoEntrada.NUMEROINTEIRO));       
@@ -290,6 +292,11 @@ private class candidato{
         btnBranco.setMargin(new java.awt.Insets(5, 14, 5, 14));
         btnBranco.setPreferredSize(new java.awt.Dimension(75, 75));
         btnBranco.setOpaque(false);
+        btnBranco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrancoActionPerformed(evt);
+            }
+        });
 
         btnConfirma.setBackground(new java.awt.Color(0, 204, 51));
         btnConfirma.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -474,11 +481,11 @@ private class candidato{
     private void btnCorrigeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorrigeActionPerformed
         botaoCorrige();
     }//GEN-LAST:event_btnCorrigeActionPerformed
-
-    private void btnConfirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmaActionPerformed
+    
+    private void botaoConfirmar(){
         int candVotado = 0;
         if (!txtNumCand.getText().isEmpty()){
-            int votoConfirma = JOptionPane.showConfirmDialog(rootPane, "Confirma o candidato selecionado?", "Confirma?", YES_NO_OPTION);
+            int votoConfirma = JOptionPane.showConfirmDialog(rootPane, "Confirma o voto?\n", "Confirma?", YES_NO_OPTION);
             switch(votoConfirma){
                 case 0:
                     for(int i = 0; i < votos.length;i++){
@@ -486,7 +493,6 @@ private class candidato{
                             candVotado = Integer.parseInt(txtNumCand.getText());
                             votos[i] = candVotado;
                             JOptionPane.showConfirmDialog(rootPane, "Voto confirmado com sucesso", "Confirmação", OK_CANCEL_OPTION);
-                            qtdVotos++;
                             botaoCorrige();
                             break;
                         } else if (i==votos.length){
@@ -497,6 +503,9 @@ private class candidato{
         } else {
             JOptionPane.showMessageDialog(rootPane,"Digite o numero do candidato\nPara votar nulo, digite 00\nPara votar em branco, clique no botão 'Branco'","Voto não registrado",WARNING_MESSAGE);
         }
+    }
+    private void btnConfirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmaActionPerformed
+        botaoConfirmar();
     }//GEN-LAST:event_btnConfirmaActionPerformed
     
     private void txtNumCandFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumCandFocusLost
@@ -565,29 +574,73 @@ private class candidato{
     }//GEN-LAST:event_btnTeclado9ActionPerformed
 
     private void btnApurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApurarActionPerformed
-        int qtdVotosNulo = 0, qtdVotos13 = 0, qtdVotos17 = 0, qtdVotos18 = 0, qtdVotos66 = 0;
+        float qtdVotosTotal = 0, qtdVotosNulo = 0, qtdVotos13 = 0, qtdVotos17 = 0, qtdVotos18 = 0, qtdVotos66 = 0, qtdVotosBranco = 0;
+        float percentNulo = 0, percent13 = 0, percent17 = 0, percent18 = 0, percent66 = 0, percentBranco = 0;
+        
         for(int i=0;i<votos.length;i++){
-            switch(votos[i]){
-                case 00:
+
+            if(votos[i]!= -1){
+                qtdVotosTotal++;
+                if(votos[i]==00){
                     qtdVotosNulo++;
-                    break;
-                case 13:
+
+                } else if(votos[i]==99){
+                    qtdVotosBranco++;
+
+                } else if(votos[i]==13){
                     qtdVotos13++;
-                    break;
-                case 17:
+
+                } else if(votos[i]==17){
                     qtdVotos17++;
-                    break;
-                case 18:
+
+                } else if(votos[i]==18){
                     qtdVotos18++;
-                    break;
-                case 66:
+
+                } else if(votos[i]==66){
                     qtdVotos66++;
-                    break;
+
+                }
             }
         }
-        String textoApuracao = "Votos Nulo : "+qtdVotosNulo+"\nVotos 13     : "+qtdVotos13+"\nVotos 17     : "+qtdVotos17+"\nVotos 18     : "+qtdVotos18+"\nVotos 66     : "+qtdVotos66;
-        JOptionPane.showMessageDialog(rootPane, textoApuracao);
+
+        percentBranco = (qtdVotosBranco/qtdVotosTotal)*100;
+        percentNulo = (qtdVotosNulo/qtdVotosTotal)*100;
+        percent13 = (qtdVotos13/qtdVotosTotal)*100;
+        percent17 = (qtdVotos17/qtdVotosTotal)*100;
+        percent18 = (qtdVotos18/qtdVotosTotal)*100;
+        percent66 = (qtdVotos66/qtdVotosTotal)*100;
+        
+
+        
+        DecimalFormat frmtQtd = new DecimalFormat();
+        frmtQtd.setMaximumFractionDigits(0);
+        
+        DecimalFormat frmtPerc = new DecimalFormat();
+        frmtPerc.setMaximumFractionDigits(2);
+        
+        String textoApuracao = "Total de votos     : "+frmtQtd.format(qtdVotosTotal)+"   |   Percentual"+
+        "\nVotos Nulo          : "+frmtQtd.format(qtdVotosNulo)+"   |   "+frmtPerc.format(percentNulo)+ 
+        "%\nVotos Branco      : "+frmtQtd.format(qtdVotosBranco)+"   |   "+frmtPerc.format(percentBranco)+ 
+        "%\nVotos 13              : "+frmtQtd.format(qtdVotos13)+ "   |   "+frmtPerc.format(percent13)+
+        "%\nVotos 17              : "+frmtQtd.format(qtdVotos17)+"   |   "+frmtPerc.format(percent17)+
+        "%\nVotos 18              : "+frmtQtd.format(qtdVotos18)+"   |   "+frmtPerc.format(percent18)+
+        "%\nVotos 66              : "+frmtQtd.format(qtdVotos66)+"   |   "+frmtPerc.format(percent66)+"%";
+        
+        JOptionPane.showMessageDialog(rootPane, textoApuracao,"Apuração de Votos",PLAIN_MESSAGE);
     }//GEN-LAST:event_btnApurarActionPerformed
+
+    
+    private void btnBrancoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrancoActionPerformed
+        int confirmaBranco = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente votar branco?", "Confirma Branco", YES_NO_OPTION, PLAIN_MESSAGE);
+        switch(confirmaBranco){
+            case 0:
+                txtNumCand.setText("99");
+                gerarCandidato();
+                botaoConfirmar();
+            case 1:
+                botaoCorrige();
+        }
+    }//GEN-LAST:event_btnBrancoActionPerformed
 
     
     private void gerarCandidato(){
