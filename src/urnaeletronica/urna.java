@@ -657,12 +657,14 @@ private class candidato{
                         lblResPart.setText(candidatos[i].getPartido());
                         lblResPres.setText(candidatos[i].getNomePres());
                         lblResVice.setText(candidatos[i].getNomeVicePres());
-                        ImageIcon iconPres = new ImageIcon("C:\\Users\\mazzan\\Documents\\NetBeansProjects\\UrnaEletronica\\src\\urnaeletronica\\"+candidatos[i].getImgPres());
-                        imgPres.setIcon(iconPres);
-                        //imgPres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/urnaeletronica/"+candidatos[i].getImgPres())));
-                        ImageIcon iconVice = new ImageIcon("C:\\Users\\mazzan\\Documents\\NetBeansProjects\\UrnaEletronica\\src\\urnaeletronica\\"+candidatos[i].getImgVice());
-                        imgVice.setIcon(iconVice);
-                        //imgVice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/urnaeletronica/"+candidatos[i].getImgVice())));
+                        if(candidatos[i]!=c5 && candidatos[i]!=c6){
+                            ImageIcon iconPres = new ImageIcon(getClass().getResource("/urnaeletronica/"+candidatos[i].getImgPres()));
+                            imgPres.setIcon(iconPres);
+                            //imgPres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/urnaeletronica/"+candidatos[i].getImgPres())));
+                            ImageIcon iconVice = new ImageIcon(getClass().getResource("/urnaeletronica/"+candidatos[i].getImgVice()));
+                            imgVice.setIcon(iconVice);
+                            //imgVice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/urnaeletronica/"+candidatos[i].getImgVice())));
+                        }
                         return;
                     } else {
                         verificador++;
