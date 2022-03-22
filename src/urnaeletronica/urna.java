@@ -572,7 +572,7 @@ private class candidato{
         txtNumCand.setText(textoPrev+"9");
         gerarCandidato();
     }//GEN-LAST:event_btnTeclado9ActionPerformed
-
+    
     private void btnApurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApurarActionPerformed
         float qtdVotosTotal = 0, qtdVotosNulo = 0, qtdVotos13 = 0, qtdVotos17 = 0, qtdVotos18 = 0, qtdVotos66 = 0, qtdVotosBranco = 0;
         float percentNulo = 0, percent13 = 0, percent17 = 0, percent18 = 0, percent66 = 0, percentBranco = 0;
@@ -602,13 +602,51 @@ private class candidato{
                 }
             }
         }
-
+        
+        float[] maisVotado = {qtdVotos13, qtdVotos17, qtdVotos18, qtdVotos66, qtdVotosNulo, qtdVotosBranco};
+        
+        float aux;
+        float maior = 0;
+        int posicao = 0;
+        for (int i = 0; i < maisVotado.length; i++){
+            if(maisVotado[i]>=maior){
+                if(maisVotado[i]==maior){
+                    posicao = -1;
+                } else {
+                    maior = maisVotado[i];
+                    posicao = i;
+                }
+            }
+        }
+        String vencedor = "";
+        if(maior!=0){
+            if (posicao==0){
+                vencedor = candidatos[0].getPartido();
+            } else if (posicao==1){
+                vencedor = candidatos[1].getPartido();
+            } else if (posicao==2){
+                vencedor = candidatos[2].getPartido();
+            } else if (posicao==3){
+                vencedor = candidatos[3].getPartido();
+            } else if (posicao==4){
+                vencedor = candidatos[4].getPartido();
+            } else if (posicao==5){
+                vencedor = candidatos[5].getPartido();
+            } else if (posicao==-1){
+                vencedor = "Segundo turno";
+            }
+        } else {
+            vencedor = "NENHUM";
+        }
+        
+        
         percentBranco = (qtdVotosBranco/qtdVotosTotal)*100;
         percentNulo = (qtdVotosNulo/qtdVotosTotal)*100;
         percent13 = (qtdVotos13/qtdVotosTotal)*100;
         percent17 = (qtdVotos17/qtdVotosTotal)*100;
         percent18 = (qtdVotos18/qtdVotosTotal)*100;
         percent66 = (qtdVotos66/qtdVotosTotal)*100;
+        
         
 
         
@@ -618,13 +656,16 @@ private class candidato{
         DecimalFormat frmtPerc = new DecimalFormat();
         frmtPerc.setMaximumFractionDigits(2);
         
-        String textoApuracao = "Total de votos     : "+frmtQtd.format(qtdVotosTotal)+"   |   Percentual"+
-        "\nVotos Nulo          : "+frmtQtd.format(qtdVotosNulo)+"   |   "+frmtPerc.format(percentNulo)+ 
-        "%\nVotos Branco      : "+frmtQtd.format(qtdVotosBranco)+"   |   "+frmtPerc.format(percentBranco)+ 
-        "%\nVotos 13              : "+frmtQtd.format(qtdVotos13)+ "   |   "+frmtPerc.format(percent13)+
-        "%\nVotos 17              : "+frmtQtd.format(qtdVotos17)+"   |   "+frmtPerc.format(percent17)+
-        "%\nVotos 18              : "+frmtQtd.format(qtdVotos18)+"   |   "+frmtPerc.format(percent18)+
-        "%\nVotos 66              : "+frmtQtd.format(qtdVotos66)+"   |   "+frmtPerc.format(percent66)+"%";
+        
+        
+        String textoApuracao = "Vencedor:              "+ vencedor+
+        "\n\nTotal de votos        : "+frmtQtd.format(qtdVotosTotal)+"   |   Percentual"+
+        "\n\nVotos Nulo              : "+frmtQtd.format(qtdVotosNulo)+"   |   "+frmtPerc.format(percentNulo)+ 
+        "%\nVotos Branco          : "+frmtQtd.format(qtdVotosBranco)+"   |   "+frmtPerc.format(percentBranco)+ 
+        "%\nVotos PQP (13)      : "+frmtQtd.format(qtdVotos13)+ "   |   "+frmtPerc.format(percent13)+
+        "%\nVotos PMlicia (17   : "+frmtQtd.format(qtdVotos17)+"   |   "+frmtPerc.format(percent17)+
+        "%\nVotos Verde (18)    : "+frmtQtd.format(qtdVotos18)+"   |   "+frmtPerc.format(percent18)+
+        "%\nVotos PEM (66)      : "+frmtQtd.format(qtdVotos66)+"   |   "+frmtPerc.format(percent66)+"%";
         
         JOptionPane.showMessageDialog(rootPane, textoApuracao,"Apuração de Votos",PLAIN_MESSAGE);
     }//GEN-LAST:event_btnApurarActionPerformed
